@@ -53,6 +53,7 @@ function adjustMacroScrapeOutput(productName, foodDetails) {
     return adjustedOutput
 }
 
+// Food name must be written in Indonesia
 function scrapeMacroNutrient(foodName) {
     let foodInput = adjustUserInput(foodName, "+");
 
@@ -108,6 +109,7 @@ function scrapeMacroNutrient(foodName) {
     return scrapeResult;
 }
 
+// Food name must be written in english
 async function getFoodImage(foodName) {
     const baseUrl = 'https://api.spoonacular.com/recipes/complexSearch';
     const apiKey = '988473b2391f4afa8b23eb4968e15c45';
