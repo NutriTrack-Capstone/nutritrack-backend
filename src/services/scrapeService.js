@@ -1,12 +1,13 @@
 const https = require('https');
 const jsdom = require('jsdom');
+const axios = require('axios');
 
 /*
 mengganti input pencarian makan menjadi sesuai
-dengan format yang diinginkan
-token = "+" untuk adjust sesuai dengan konvensi
-search yang ada pada website fatsecret.co.id
-tanpa token berarti hanya menghapus extra space saja
+dengan format yang diinginkan (default = "")
+untuk adjust sesuai dengan konvensi
+search yang ada pada website fatsecret.co.id ataupun pixabay
+default tanpa token berarti hanya menghapus extra space saja
 */
 function adjustUserInput(foodName, token) {
     let adjustedName;
@@ -16,8 +17,8 @@ function adjustUserInput(foodName, token) {
 
     cleanExtraSpace = foodName.replace(/\s+/g, " ");
 
-    if (token === "+") {
-        adjustedName = cleanExtraSpace.replace(/\s/g, "+");
+    if (token != "") {
+        adjustedName = cleanExtraSpace.replace(/\s/g, token);
         return adjustedName
     }
 
@@ -107,9 +108,49 @@ function scrapeMacroNutrient(foodName) {
     return scrapeResult;
 }
 
-function scrapeGoogleImage(foodName) {
+async function getFoodImage(foodName) {
+    const baseUrl = 'https://api.spoonacular.com/recipes/complexSearch';
+    const apiKey = '988473b2391f4afa8b23eb4968e15c45';
 
+    const params = {
+        query: foodName,
+        number: 1,
+        apiKey,
+    };
+
+    try {
+        const response = await axios.get(baseUrl, { params });
+
+        if (response.data.results.length > 0) {
+            const randomNumber = Math.floor(Math.random() * (response.data.results.length))
+            const randomImage = response.data.results[randomNumber]
+            return randomImage.image
+        } else {
+            return "https://digitalfinger.id/wp-content/uploads/2019/12/no-image-available-icon-6.png"
+        }
+    } catch (error) {
+        if (error.response) {
+            console.error(`Error fetching data from Spoonacular API: ${error.response.status} - ${error.response.data}`);
+        } else if (error.request) {
+            console.error(`Error making the request to Spoonacular API: ${error.message}`);
+        } else {
+            console.error(`Unexpected error: ${error.message}`);
+        }
+    return null;
+  }
 }
+
+// Example usage:
+const foodName = 'bread';
+
+getFoodImage(foodName)
+    .then(image => {
+        console.log(`The image URL for ${foodName} is: ${image}`);
+    })
+    .catch(error => console.error(error));
+
+
+
 
 function scrapeTotal(foodName) {
 
@@ -123,4 +164,5 @@ function randomizeOrder(foodList) {
 module.exports = {
     adjustUserInput,
     adjustMacroScrapeOutput,
+    getFoodImage,
 };
