@@ -1,0 +1,26 @@
+{
+  "name": "nutritrack-backend",
+  "version": "1.0.0",
+  "description": "nutritrack backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/loopfree/nutritrack-backend.git"
+  },
+  "keywords": [
+    "diet",
+    "nutritient"
+  ],
+  "author": "nutritrack backend team",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/loopfree/nutritrack-backend/issues"
+  },
+  "homepage": "https://github.com/loopfree/nutritrack-backend#readme",
+  "dependencies": {
+    
+  }
+}
