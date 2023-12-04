@@ -21,6 +21,6 @@
   },
   "homepage": "https://github.com/loopfree/nutritrack-backend#readme",
   "dependencies": {
-    
+    "jsdom": "^23.0.1"
   }
 }
