@@ -12,13 +12,16 @@ function adjustUserInput(foodName, token) {
     let adjustedName;
     let cleanExtraSpace;
 
+    foodName = foodName.trim();
+
     cleanExtraSpace = foodName.replace(/\s+/g, " ");
 
     if (token === "+") {
         adjustedName = cleanExtraSpace.replace(/\s/g, "+");
+        return adjustedName
     }
 
-    return adjustedName
+    return cleanExtraSpace
 }
 
 /*
@@ -41,7 +44,7 @@ function adjustMacroScrapeOutput(productName, foodDetails) {
     let totalCarb = parseFloat(foodDetails.match(carbRegex)[1].replace(',', '.'));
     let totalProt = parseFloat(foodDetails.match(protRegex)[1].replace(',', '.'));
 
-    adjustedOutput.push(totalCal)
+    adjustedOutput.push(Math.round(totalCal))
     adjustedOutput.push(totalFat)
     adjustedOutput.push(totalCarb)
     adjustedOutput.push(totalProt)
@@ -116,4 +119,8 @@ function randomizeOrder(foodList) {
 
 }
 
-console.log(scrapeMacroNutrient("nasi goreng"))
+// console.log(scrapeMacroNutrient("nasi goreng"))
+module.exports = {
+    adjustUserInput,
+    adjustMacroScrapeOutput,
+};

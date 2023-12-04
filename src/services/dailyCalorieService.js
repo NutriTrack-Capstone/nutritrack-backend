@@ -6,10 +6,12 @@ age bertipe integer
 */
 function calculateBMR (weight, height, gender, age) {
     if (gender === 1) {
-        return 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age)
+        let maleBMR =  88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age)
+        return Math.round(maleBMR)
     }
     else if (gender === 2) {
-        return 447.593 + (9.247 * weight) + (3.098 * height) - (4.33 * age)
+        let femaleBMR = 447.593 + (9.247 * weight) + (3.098 * height) - (4.33 * age)
+        return Math.round(femaleBMR)
     }
     else {
         throw new Error("Invalid Gender.")
@@ -54,4 +56,7 @@ function calculateDailyCalories(weight, height, gender, age, activityLevel) {
     return Math.round(dailyCalories);
 }
 
-// console.log(calculateDailyCalories(72, 167, 1, 21, 3))
+module.exports = {
+    calculateBMR,
+    calculateDailyCalories,
+};
