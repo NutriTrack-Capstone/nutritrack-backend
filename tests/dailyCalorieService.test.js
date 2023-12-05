@@ -1,4 +1,4 @@
-const { calculateBMR, calculateDailyCalories } = require("../src/services/dailyCalorieService")
+const { calculateBMR, calculateDailyCalories, updateDailyCalorie } = require("../src/services/dailyCalorieService")
 
 describe("calculateBMR", () => {
     test("should calculate BMR for male", () => {
@@ -16,7 +16,7 @@ describe("calculateBMR", () => {
     });
   });
   
-  describe("calculateDailyCalories", () => {
+describe("calculateDailyCalories", () => {
     test("should calculate daily calories for ideal activity level (male)", () => {
         const result = calculateDailyCalories(72, 167, 1, 21, 3);
         expect(result).toBe(2689);
@@ -29,5 +29,28 @@ describe("calculateBMR", () => {
   
     test("should throw an error for invalid activity level", () => {
         expect(() => calculateDailyCalories(60, 160, 2, 30, 6)).toThrow('Invalid Activity Level.');
+    });
+});
+
+describe("updateDailyCalorie", () => {
+    test('updates daily calorie when calorieIntake is greater than 0', () => {
+        const initialCalorie = 2000;
+        const calorieIntake = 500;
+        const updatedCalorie = updateDailyCalorie(initialCalorie, calorieIntake);
+        expect(updatedCalorie).toBe(initialCalorie - calorieIntake);
+    });
+
+    test('does not update daily calorie when calorieIntake is 0', () => {
+        const initialCalorie = 2000;
+        const calorieIntake = 0;
+        const updatedCalorie = updateDailyCalorie(initialCalorie, calorieIntake);
+        expect(updatedCalorie).toBe(initialCalorie);
+    });
+
+    test('does not update daily calorie when calorieIntake is less than 0', () => {
+        const initialCalorie = 2000;
+        const calorieIntake = -500;
+        const updatedCalorie = updateDailyCalorie(initialCalorie, calorieIntake);
+        expect(updatedCalorie).toBe(initialCalorie);
     });
 });
