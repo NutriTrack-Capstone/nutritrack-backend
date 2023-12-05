@@ -56,7 +56,19 @@ function calculateDailyCalories(weight, height, gender, age, activityLevel) {
     return Math.round(dailyCalories);
 }
 
+/*
+Fungsi bantuan untuk mengurangi kalori harian user
+*/
+function updateDailyCalorie(dailyCalorieLeft, calorieIntake) {
+    if (calorieIntake > 0) {
+        return dailyCalorieLeft - calorieIntake
+    }
+    // do nothing
+    return dailyCalorieLeft    
+}
+
 module.exports = {
     calculateBMR,
     calculateDailyCalories,
+    updateDailyCalorie,
 };
