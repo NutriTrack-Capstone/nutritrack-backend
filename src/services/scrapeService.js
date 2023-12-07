@@ -54,7 +54,7 @@ function adjustMacroScrapeOutput(productName, foodDetails) {
 }
 
 // Food name must be written in Indonesia
-function scrapeMacroNutrient(foodName) {
+async function scrapeMacroNutrient(foodName) {
     let foodInput = adjustUserInput(foodName, "+");
 
     let baseURL = "https://www.fatsecret.co.id/kalori-gizi/search?q=";
@@ -62,51 +62,45 @@ function scrapeMacroNutrient(foodName) {
     console.log(finalURL);
 
     let scrapeResult = [];
+
     // Melakukan scraping dengan cara mengkonversi laman dari url
     // menjadi sebuah raw html file
-    https.get(finalURL, (res) => {
-        let rawHtml = '';
-        res.on('data', (chunk) => { rawHtml += chunk; });
-        res.on('end', () => {
-            console.log("test")
-            if (rawHtml.includes("searchNoResult")) {
-                console.log("test1")
-                return "Not Found"
-            }
+    const rawHtml = await (await fetch(finalURL)).text()
 
-            try {
-                // Melakukan ekstraksi dari hasil raw string html sebelumnya
-                const { window } = new jsdom.JSDOM(rawHtml);
-                const document = window.document;
+    if (rawHtml.includes("searchNoResult")) {
+        console.log("test1")
+        return "Not Found"
+    }
 
-                const tableRows = document.querySelectorAll('table.generic.searchResult tr');
+    try {
+        // Melakukan ekstraksi dari hasil raw string html sebelumnya
+        const { window } = new jsdom.JSDOM(rawHtml);
+        const document = window.document;
 
-                tableRows.forEach((row) => {
-                    const productNameElement = row.querySelector('a.prominent');
-                    const brandElement = row.querySelector('a.brand');
-                    const nutritionInfoElement = row.querySelector('div.smallText.greyText.greyLink');
+        const tableRows = document.querySelectorAll('table.generic.searchResult tr');
+        console.log(tableRows.length)
 
-                    if (productNameElement && brandElement && nutritionInfoElement) {
-                        let productName = productNameElement.textContent.trim();
-                        let nutritionInfo = nutritionInfoElement.textContent.trim();
+        tableRows.forEach((row) => {
+            const productNameElement = row.querySelector('a.prominent');
+            const brandElement = row.querySelector('a.brand');
+            const nutritionInfoElement = row.querySelector('div.smallText.greyText.greyLink');
 
-                        let productDetail = adjustMacroScrapeOutput(productName, nutritionInfo)
-                        console.log(productDetail)
-                        scrapeResult.push(productDetail)
-                        console.log(scrapeResult)
-                    }
-                });
-                console.log(scrapeResult)
-                console.log("test")
-                return scrapeResult
+            if (productNameElement && nutritionInfoElement) {
+                let productName = productNameElement.textContent.trim();
+                let nutritionInfo = nutritionInfoElement.textContent.trim();
 
-            } catch (e) {
-                console.error(e.message);
+                let productDetail = adjustMacroScrapeOutput(productName, nutritionInfo)
+                // console.log(productDetail)
+                scrapeResult.push(productDetail)
+                // console.log(scrapeResult)
             }
         });
-    });
 
-    return scrapeResult;
+    } catch (e) {
+        console.error(e.message);
+    }
+
+    return scrapeResult
 }
 
 // Food name must be written in english
@@ -142,16 +136,18 @@ async function getFoodImage(foodName) {
   }
 }
 
-// Example usage:
-const foodName = 'bread';
+// // Example usage:
+// const foodName = 'bread';
 
-getFoodImage(foodName)
-    .then(image => {
-        console.log(`The image URL for ${foodName} is: ${image}`);
-    })
-    .catch(error => console.error(error));
+// getFoodImage(foodName)
+//     .then(image => {
+//         console.log(`The image URL for ${foodName} is: ${image}`);
+//     })
+//     .catch(error => console.error(error));
 
-
+(async () => {
+    console.log(await scrapeMacroNutrient("nasi goreng"))
+})().then();
 
 
 function scrapeTotal(foodName) {
