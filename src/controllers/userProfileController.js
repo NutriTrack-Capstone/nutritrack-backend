@@ -12,6 +12,27 @@ const saveUserProfile = async (req, res) => {
     res.json({ message: result })
 }
 
+const updateUserProfile = async (req, res) => {
+    const { username, age, height, weight, gender } = req.body
+    const result = await UserProfileModel.updateUserProfile(username, age, height, weight, gender);
+    res.json({ message: result })
+}
+
+const updateDailyNutrition = async (req, res) => {
+    const { username, calories, carbo, protein, flat } = req.body
+    const result = await UserProfileModel.updateDailyNutrition(username, calories, carbo, protein, flat);
+    res.json({ message: result })
+}
+
+const getDailyNutrition = async (req, res) => {
+    const { username } = req.params;
+    const result = await UserProfileModel.getDailyNutrition(username);
+    res.json(result);
+};
+
 module.exports = {
-    saveUserProfile
+    saveUserProfile,
+    updateUserProfile,
+    updateDailyNutrition,
+    getDailyNutrition
 }

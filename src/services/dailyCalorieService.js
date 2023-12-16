@@ -28,7 +28,7 @@ activity level berkisar dari 1-5
 
 gunakan activityLevel 3 (ideal)
 */
-function calculateDailyCalories(weight, height, gender, age, activityLevel = 1) {
+function calculateDailyCalories(weight, height, gender, age, activityLevel = 3) {
     bmr = calculateBMR(weight, height, gender, age)
 
     let  dailyCalories;
