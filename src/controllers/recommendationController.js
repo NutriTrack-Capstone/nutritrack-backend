@@ -1,4 +1,4 @@
-const { getFoodByCalories } = require('../models/foodModel.js');
+const { getFoodByCalories } = require('../models/recommendationModel.js');
 const { mealCalRec } = require('../services/recommendationService');
 
 const getFoodRecommendation = async (req, res) => {

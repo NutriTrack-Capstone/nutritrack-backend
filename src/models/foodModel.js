@@ -1,12 +1,14 @@
 const pool = require("../config/database")
 
-async function getFoodByCalories(calories) {
-    const sql = "SELECT * FROM Foods WHERE calories <= ?"
-    const holder =  await pool.execute(sql, [calories])
-
-    return holder[0][holder[0].length - 1]
+class foodModel {
+    async getFood(character) {
+        try {
+            const [results] = await pool.execute("SELECT * FROM Foods WHERE UPPER(name) LIKE ?", [`%${character.toUpperCase()}%`]);
+            return { success: true, data: results };
+        } catch (error) {
+            return { success: false, error: "Failed to fetch food information" };
+        }
+    }
 }
 
-module.exports = {
-    getFoodByCalories
-}
+module.exports = new foodModel();

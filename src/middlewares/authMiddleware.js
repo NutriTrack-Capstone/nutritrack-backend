@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken")
 
 function authMiddleware (req, res, next) {
     const token = req.headers.authorization
-    console.log("ini middle ware", token)
+    // console.log("ini middle ware", token)
     if (!token) {
         res.json({ message: "Token not found" })
     } else {
