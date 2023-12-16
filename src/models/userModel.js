@@ -2,6 +2,11 @@ const pool = require("../config/database")
 
 class UserAccountModel {
     async createUser(username, password) {
+        const existingUser = await this.getUserByUsername(username);
+        if (existingUser) {
+            return "USERNAME ALREADY EXISTS";
+        }
+
         const result = await pool.execute(
             "INSERT INTO UsersAccount (username, password) VALUES (?,?)", 
             [username, password]
