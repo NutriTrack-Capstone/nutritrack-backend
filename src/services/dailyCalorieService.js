@@ -67,8 +67,26 @@ function updateDailyCalorie(dailyCalorieLeft, calorieIntake) {
     return dailyCalorieLeft    
 }
 
+/*
+Kebutuhan gizi makro dalam gram
+*/
+function calculateDailyCarbo(dailyCalories) {
+    return Math.round(dailyCalories * 0.65 / 4);
+}
+
+function calculateDailyProtein(dailyCalories) {
+    return Math.round(dailyCalories * 0.15 / 4); 
+}
+
+function calculateDailyFat(dailyCalories) {
+    return Math.round(dailyCalories * 0.2 / 9);
+}
+
 module.exports = {
     calculateBMR,
     calculateDailyCalories,
     updateDailyCalorie,
+    calculateDailyCarbo,
+    calculateDailyProtein,
+    calculateDailyFat,
 };
