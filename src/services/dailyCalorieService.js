@@ -5,11 +5,11 @@ gender berupa 1 (male) dan 2 (female)
 age bertipe integer
 */
 function calculateBMR (weight, height, gender, age) {
-    if (gender === 1) {
+    if (gender == 1) {
         let maleBMR =  88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age)
         return Math.round(maleBMR)
     }
-    else if (gender === 2) {
+    else if (gender == 2) {
         let femaleBMR = 447.593 + (9.247 * weight) + (3.098 * height) - (4.33 * age)
         return Math.round(femaleBMR)
     }
@@ -28,7 +28,7 @@ activity level berkisar dari 1-5
 
 gunakan activityLevel 3 (ideal)
 */
-function calculateDailyCalories(weight, height, gender, age, activityLevel) {
+function calculateDailyCalories(weight, height, gender, age, activityLevel = 1) {
     bmr = calculateBMR(weight, height, gender, age)
 
     let  dailyCalories;
