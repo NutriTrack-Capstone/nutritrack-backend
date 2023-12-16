@@ -1,9 +1,10 @@
 const express = require('express');
-const { saveUserProfile, updateUserProfile, updateDailyNutrition, getDailyNutrition} = require('../controllers/userProfileController');
+const { saveUserProfile, updateUserProfile, updateDailyNutrition, getDailyNutrition, getUserProfileByUsername} = require('../controllers/userProfileController');
 const router = express.Router();
 
 router.post("/user-profile", saveUserProfile);
 router.put("/user-profile", updateUserProfile);
+router.get("/user-profile/:username", getUserProfileByUsername);
 router.put("/nutrition-user", updateDailyNutrition);
 router.get("/nutrition-user/:username", getDailyNutrition);
 

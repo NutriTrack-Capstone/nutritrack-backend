@@ -30,9 +30,16 @@ const getDailyNutrition = async (req, res) => {
     res.json(result);
 };
 
+const getUserProfileByUsername = async (req, res) => {
+    const { username } = req.params;
+    const result = await UserProfileModel.getUserProfileByUsername(username);
+    res.json(result);
+};
+
 module.exports = {
     saveUserProfile,
     updateUserProfile,
     updateDailyNutrition,
-    getDailyNutrition
+    getDailyNutrition,
+    getUserProfileByUsername
 }

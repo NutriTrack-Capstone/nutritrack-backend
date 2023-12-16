@@ -109,6 +109,15 @@ class UserProfileModel {
         };
     }
 
+    async getUserProfileByUsername(username) {
+        try {
+            const [result] = await pool.execute("SELECT * FROM UsersProfile WHERE username = ?", [username]);
+            return result.length > 0 ? { success: true, data: result[0] } : { success: false, error: "User profile not found" };
+        } catch (error) {
+            return { success: false, error: "Failed to fetch user profile by username" };
+        }
+    }
+
 }
 
 module.exports = new UserProfileModel();
