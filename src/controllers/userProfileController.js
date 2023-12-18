@@ -53,10 +53,34 @@ const getUserProfileByUsername = async (req, res) => {
     res.status(result.status === "success" ? 200 : 404).json(result);
 };
 
+const resetAllDailyNutrition = async (req, res) => {
+    const result = await UserProfileModel.resetAllDailyNutrition();
+
+    if (result.status === "success") {
+        res.status(200).json(result);
+    } else {
+        res.status(500).json(result);
+    }
+};
+
+const resetDailyNutritionByUsername = async (req, res) => {
+    const { username } = req.params;
+
+    const result = await UserProfileModel.resetDailyNutritionByUsername(username);
+
+    if (result.status === "success") {
+        res.status(200).json(result);
+    } else {
+        res.status(500).json(result);
+    }
+};
+
 module.exports = {
     saveUserProfile,
     updateUserProfile,
     updateDailyNutrition,
     getDailyNutrition,
-    getUserProfileByUsername
+    getUserProfileByUsername,
+    resetAllDailyNutrition,
+    resetDailyNutritionByUsername
 }

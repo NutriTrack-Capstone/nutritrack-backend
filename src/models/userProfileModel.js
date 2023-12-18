@@ -53,14 +53,44 @@ class UserProfileModel {
         } return {status : "success", "message":"SUCCESS UPDATE USER PROFILE"};
     }
 
-    async resetDailyNutrition() {
-        const result = await pool.execute(
-            "UPDATE UsersProfile SET dailyCaloriesLeft = maintainCalories, dailyCarboLeft = maintainCarbo, dailyProteinLeft = maintainProtein, dailyFatLeft = maintainFat"
-        );
+    async resetAllDailyNutrition() {
+        try {
+            const result = await pool.execute(
+                "UPDATE UsersProfile SET dailyCaloriesLeft = maintainCalories, dailyCarboLeft = maintainCarbo, dailyProteinLeft = maintainProtein, dailyFatLeft = maintainFat"
+            );
 
-        if (result.affectedRows === 0) {
-            return {status : "error", "message":"FAIL RESET DAILY NUTRITION"};
-        } return {status : "success", "message":"SUCCESS RESET DAILY NUTRITION"};
+            if (result.affectedRows === 0) {
+                return { status: "error", message: "FAIL RESET ALL DAILY NUTRITION" };
+            }
+
+            return { status: "success", message: "SUCCESS RESET ALL DAILY NUTRITION" };
+        } catch (error) {
+            console.error("Error resetting all daily nutrition:", error);
+            return { status: "error", message: "Internal Server Error" };
+        }
+    }
+
+    async resetDailyNutritionByUsername(username) {
+        try {
+            const existingUser = await this.getUsernameFromUsersProfile(username);
+            if (existingUser === null) {
+                return {status : "error", "message":"USERNAME NOT FOUND"};
+            }
+
+            const result = await pool.execute(
+                "UPDATE UsersProfile SET dailyCaloriesLeft = maintainCalories, dailyCarboLeft = maintainCarbo, dailyProteinLeft = maintainProtein, dailyFatLeft = maintainFat WHERE username = ?",
+                [username]
+            );
+
+            if (result.affectedRows === 0) {
+                return { status: "error", message: "FAIL RESET DAILY NUTRITION BY USERNAME" };
+            }
+
+            return { status: "success", message: "SUCCESS RESET DAILY NUTRITION BY USERNAME" };
+        } catch (error) {
+            console.error("Error resetting daily nutrition by username:", error);
+            return { status: "error", message: "Internal Server Error" };
+        }
     }
 
     async updateDailyNutrition(username, calories, carbo, protein, flat) {
