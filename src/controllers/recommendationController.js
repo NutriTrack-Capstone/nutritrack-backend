@@ -13,8 +13,7 @@ const getFoodRecommendation = async (req, res) => {
     // Fetch food recommendations based on recommended calories
     const foodRecommendations = await getFoodByCalories(recommendedCalories);
 
-    res.json({ foodRecommendations });
-    // res.json("Hello World")
+    res.status(200).json({ status: "success", data: foodRecommendations });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
