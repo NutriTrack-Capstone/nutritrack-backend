@@ -23,9 +23,9 @@ class UserProfileModel {
 
     async createUserProfile(username, age, height, weight, gender, maintainCalories, maintainCarbo, maintainProtein, maintainFat) {
         if (await this.getUsernameFromUsersAccount(username) == null) {
-            return "USERNAME NOT FOUND";
+            return {status : "error", "message":"USERNAME NOT FOUND"};
         } else if (await this.getUsernameFromUsersProfile(username)) {
-            return "USER PROFILE ALREADY EXIST"
+            return {status : "error", "message":"USER PROFILE ALREADY EXIST"};
         }
 
         const result = await pool.execute(
@@ -33,14 +33,14 @@ class UserProfileModel {
             [username, age, height, weight, gender, maintainCalories, maintainCarbo, maintainProtein, maintainFat, maintainCalories, maintainCarbo, maintainProtein, maintainFat]
         )
         if (result.length == 0) {
-            return "FAIL CREATE USER PROFILE"
-        } return "SUCCESS CREATE USER PROFILE"
+            return {status : "error", "message":"FAIL CREATE USER PROFILE"};
+        } return {status : "success", "message":"SUCCESS CREATE USER PROFILE"};
     }
 
     async updateUserProfile(username, age, height, weight, gender) {
         const existingUser = await this.getUsernameFromUsersProfile(username);
         if (existingUser === null) {
-            return "USERNAME NOT FOUND";
+            return {status : "error", "message":"USERNAME NOT FOUND"};
         }
 
         const result = await pool.execute(
@@ -49,8 +49,8 @@ class UserProfileModel {
         );
 
         if (result.affectedRows === 0) {
-            return "FAIL UPDATE USER PROFILE";
-        } return "SUCCESS UPDATE USER PROFILE";
+            return {status : "error", "message":"FAIL UPDATE USER PROFILE"};
+        } return {status : "success", "message":"SUCCESS UPDATE USER PROFILE"};
     }
 
     async resetDailyNutrition() {
@@ -59,14 +59,14 @@ class UserProfileModel {
         );
 
         if (result.affectedRows === 0) {
-            return "FAIL RESET DAILY NUTRITION";
-        } return "SUCCESS RESET DAILY NUTRITION";
+            return {status : "error", "message":"FAIL RESET DAILY NUTRITION"};
+        } return {status : "success", "message":"SUCCESS RESET DAILY NUTRITION"};
     }
 
     async updateDailyNutrition(username, calories, carbo, protein, flat) {
         const existingUser = await this.getUsernameFromUsersProfile(username);
         if (existingUser === null) {
-            return "USERNAME NOT FOUND";
+            return {status : "error", "message":"USERNAME NOT FOUND"};
         }
 
         let newDailyCaloriesLeft = Math.max(existingUser.maintainCalories - calories, 0);
@@ -80,21 +80,21 @@ class UserProfileModel {
         );
 
         if (result.affectedRows === 0) {
-            return "FAIL UPDATE USER PROFILE";
-        } return "SUCCESS UPDATE USER PROFILE";
+            return {status : "error", "message":"FAIL UPDATE DAILY NUTRITION"};
+        } return {status : "success", "message":"SUCCESS UPDATE DAILY NUTRITION"};
     }
 
     async getDailyNutrition(usernamee) {
         const user = await this.getUsernameFromUsersProfile(usernamee);
 
         if (!user) {
-            return { success: false, error: "USERNAME NOT FOUND" };
+            return { status: "error", message: "USERNAME NOT FOUND" };
         }
 
         const { username, maintainCalories, dailyCaloriesLeft, maintainCarbo, dailyCarboLeft, maintainProtein, dailyProteinLeft, maintainFat, dailyFatLeft } = user;
 
         return {
-            success: true,
+            status: "success",
             data: {
                 username,
                 maintainCalories,
@@ -112,9 +112,9 @@ class UserProfileModel {
     async getUserProfileByUsername(username) {
         try {
             const [result] = await pool.execute("SELECT * FROM UsersProfile WHERE username = ?", [username]);
-            return result.length > 0 ? { success: true, data: result[0] } : { success: false, error: "User profile not found" };
+            return result.length > 0 ? { status: "success", data: result[0] } : { status: "error", message: "User profile not found" };
         } catch (error) {
-            return { success: false, error: "Failed to fetch user profile by username" };
+            return { status: "error", message: "Failed to fetch user profile by username" };
         }
     }
 

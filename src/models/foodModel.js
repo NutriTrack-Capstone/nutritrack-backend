@@ -4,9 +4,9 @@ class foodModel {
     async getFood(character) {
         try {
             const [results] = await pool.execute("SELECT * FROM Foods WHERE UPPER(name) LIKE ?", [`%${character.toUpperCase()}%`]);
-            return { success: true, data: results };
+            return { status: "success", data: results };
         } catch (error) {
-            return { success: false, error: "Failed to fetch food information" };
+            return { status: "error", error: "Failed to fetch food information" };
         }
     }
 }

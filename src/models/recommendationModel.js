@@ -14,8 +14,8 @@ async function getFoodByCalories(calories) {
         lowerBound = Math.max(0, roundToDown100(calories - 400))
         upperBound = Math.min(roundToDown100(calories), roundToDown100(calories + 100))
     }
-    console.log(lowerBound)
-    console.log(upperBound)
+    // console.log(lowerBound)
+    // console.log(upperBound)
 
     const sql = "SELECT * FROM Foods WHERE calories BETWEEN ? AND ?"
     const holder =  await pool.execute(sql, [lowerBound, upperBound])

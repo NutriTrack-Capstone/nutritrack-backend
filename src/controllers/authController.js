@@ -3,11 +3,28 @@ const jwt = require("jsonwebtoken")
 const UserAccountModel = require("../models/userModel")
 
 const register = async (req, res) => {
-    const { username, password } = req.body
-    const hashedPassword = await bcrypt.hash(password, 0)
-    const result = await UserAccountModel.createUser(username, hashedPassword)
-    res.status(200).json({ message: result })
-}
+    const { username, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 0);
+
+    try {
+        const result = await UserAccountModel.createUser(username, hashedPassword);
+
+        if (result === "USERNAME ALREADY EXISTS") {
+            // Username already exists, return 409 Conflict
+            res.status(409).json({ status: "error", message: result });
+        } else if (result === "FAIL CREATE USER") {
+            // Failed to create user, return 500 Internal Server Error
+            res.status(500).json({ status: "error", message: result });
+        } else {
+            // Successful registration, return 201 Created
+            res.status(201).json({ status: "success", message: result });
+        }
+    } catch (error) {
+        // Handle other errors, return 500 Internal Server Error
+        console.error("Error during registration:", error);
+        res.status(500).json({ status: "error", message: "Internal Server Error" });
+    }
+};
 
 const login = async (req, res) => {
     const { username, password } = req.body

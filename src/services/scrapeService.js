@@ -46,9 +46,9 @@ function adjustMacroScrapeOutput(productName, foodDetails) {
     let totalProt = parseFloat(foodDetails.match(protRegex)[1].replace(',', '.'));
 
     adjustedOutput.push(Math.round(totalCal))
-    adjustedOutput.push(totalFat)
     adjustedOutput.push(totalCarb)
     adjustedOutput.push(totalProt)
+    adjustedOutput.push(totalFat)
 
     return adjustedOutput
 }
@@ -146,7 +146,7 @@ async function getFoodImage(foodName) {
 //     .catch(error => console.error(error));
 
 (async () => {
-    console.log(await scrapeMacroNutrient("nasi goreng"))
+    console.log(await scrapeMacroNutrient("Tomat"))
 })().then();
 
 
