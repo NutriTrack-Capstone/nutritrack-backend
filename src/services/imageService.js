@@ -6,6 +6,8 @@ async function imageBufferTo3DArray(imageBuffer) {
         // Read the image with Jimp
         const image = await Jimp.read(imageBuffer);
 
+        image.resize(224, 224);
+
         // Get image data
         const { width, height, data } = image.bitmap;
 
@@ -30,9 +32,14 @@ async function imageBufferTo3DArray(imageBuffer) {
     }
 }
 
-const imagePath = "../../img/lemon.png";
-const imageBuffer = fs.readFileSync(imagePath);
+module.exports = {
+    imageBufferTo3DArray
+}
 
-imageBufferTo3DArray(imageBuffer).then((imageArray) => {
-    console.log(imageArray);
-});
+// const imagePath = "img/lemon.png";
+// const imageBuffer = fs.readFileSync(imagePath);
+// console.log(imageBuffer)
+
+// imageBufferTo3DArray(imageBuffer).then((imageArray) => {
+//     console.log(imageArray);
+// });

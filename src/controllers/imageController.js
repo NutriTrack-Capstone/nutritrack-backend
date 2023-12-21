@@ -18,7 +18,7 @@ const imageDetection = async (req, res) => {
             instances: [imageArray],
         });
 
-        console.log({status:"success", data: {score:modelResponse.data.predictions[0].score[0]}})
+        // console.log({status:"success", data: {score:modelResponse.data.predictions[0].score[0]}})
 
         if(modelResponse.data.predictions.length > 0){
             const result = await getCustomFood(req.query.name);
