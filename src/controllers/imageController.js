@@ -18,10 +18,10 @@ const imageDetection = async (req, res) => {
             instances: [imageArray],
         });
 
-        // console.log({status:"success", data: {score:modelResponse.data.predictions[0].score[0]}})
+        console.log({status:"success", data: {score:modelResponse.data.predictions[0].label[0]}})
 
         if(modelResponse.data.predictions.length > 0){
-            const result = await getCustomFood(req.query.name);
+            const result = await getCustomFood(modelResponse.data.predictions[0].label[0]);
             if (result.status === "success") {
                 res.status(200).json({status:"success", data: {score:modelResponse.data.predictions[0].score[0], result}});
             } else {
