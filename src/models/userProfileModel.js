@@ -29,8 +29,8 @@ class UserProfileModel {
         }
 
         const result = await pool.execute(
-            "INSERT INTO UsersProfile (username, age, height, weight, gender, maintainCalories, maintainCarbo, maintainProtein, maintainFat, dailyCaloriesLeft, dailyCarboLeft, dailyProteinLeft, dailyFatLeft) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); ", 
-            [username, age, height, weight, gender, maintainCalories, maintainCarbo, maintainProtein, maintainFat, maintainCalories, maintainCarbo, maintainProtein, maintainFat]
+            "INSERT INTO UsersProfile (username, age, height, weight, gender, maintainCalories, maintainCarbo, maintainProtein, maintainFat, dailyCaloriesLeft, dailyCarboLeft, dailyProteinLeft, dailyFatLeft, currentCalories, currentCarbo, currentProtein, currentFat) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); ", 
+            [username, age, height, weight, gender, maintainCalories, maintainCarbo, maintainProtein, maintainFat, maintainCalories, maintainCarbo, maintainProtein, maintainFat, 0, 0, 0, 0]
         )
         if (result.length == 0) {
             return {status : "error", "message":"FAIL CREATE USER PROFILE"};
@@ -56,7 +56,7 @@ class UserProfileModel {
     async resetAllDailyNutrition() {
         try {
             const result = await pool.execute(
-                "UPDATE UsersProfile SET dailyCaloriesLeft = maintainCalories, dailyCarboLeft = maintainCarbo, dailyProteinLeft = maintainProtein, dailyFatLeft = maintainFat"
+                "UPDATE UsersProfile SET dailyCaloriesLeft = maintainCalories, dailyCarboLeft = maintainCarbo, dailyProteinLeft = maintainProtein, dailyFatLeft = maintainFat, currentCalories = 0, currentCarbo = 0, currentProtein = 0, currentFat = 0"
             );
 
             if (result.affectedRows === 0) {
@@ -78,7 +78,7 @@ class UserProfileModel {
             }
 
             const result = await pool.execute(
-                "UPDATE UsersProfile SET dailyCaloriesLeft = maintainCalories, dailyCarboLeft = maintainCarbo, dailyProteinLeft = maintainProtein, dailyFatLeft = maintainFat WHERE username = ?",
+                "UPDATE UsersProfile SET dailyCaloriesLeft = maintainCalories, dailyCarboLeft = maintainCarbo, dailyProteinLeft = maintainProtein, dailyFatLeft = maintainFat, currentCalories = 0, currentCarbo = 0, currentProtein = 0, currentFat = 0 WHERE username = ?",
                 [username]
             );
 
@@ -104,9 +104,14 @@ class UserProfileModel {
         let newDailyProteinLeft = Math.max(existingUser.maintainProtein - protein, 0);
         let newDailyFatLeft = Math.max(existingUser.maintainFat - flat, 0);
 
+        let newCurrentCalories = existingUser.currentCalories + calories;
+        let newCurrentCarbo = existingUser.currentCarbo + carbo;
+        let newCurrentProtein = existingUser.currentProtein + protein;
+        let newCurrentFat = existingUser.currentFat + flat; 
+
         const result = await pool.execute(
-            "UPDATE UsersProfile SET dailyCaloriesLeft = ?, dailyCarboLeft = ?, dailyProteinLeft = ?, dailyFatLeft = ? WHERE username = ?",
-            [newDailyCaloriesLeft, newDailyCarboLeft, newDailyProteinLeft, newDailyFatLeft, username]
+            "UPDATE UsersProfile SET dailyCaloriesLeft = ?, dailyCarboLeft = ?, dailyProteinLeft = ?, dailyFatLeft = ?, currentCalories = ?, currentCarbo = ?, currentProtein = ?, currentFat = ?  WHERE username = ?",
+            [newDailyCaloriesLeft, newDailyCarboLeft, newDailyProteinLeft, newDailyFatLeft, newCurrentCalories, newCurrentCarbo, newCurrentProtein, newCurrentFat ,username]
         );
 
         if (result.affectedRows === 0) {
@@ -121,7 +126,7 @@ class UserProfileModel {
             return { status: "error", message: "USERNAME NOT FOUND" };
         }
 
-        const { username, maintainCalories, dailyCaloriesLeft, maintainCarbo, dailyCarboLeft, maintainProtein, dailyProteinLeft, maintainFat, dailyFatLeft } = user;
+        const { username, maintainCalories, dailyCaloriesLeft, maintainCarbo, dailyCarboLeft, maintainProtein, dailyProteinLeft, maintainFat, dailyFatLeft, currentCalories, currentCarbo, currentProtein, currentFat } = user;
 
         return {
             status: "success",
@@ -129,12 +134,16 @@ class UserProfileModel {
                 username,
                 maintainCalories,
                 dailyCaloriesLeft,
+                currentCalories,
                 maintainCarbo,
                 dailyCarboLeft,
+                currentCarbo,
                 maintainProtein,
                 dailyProteinLeft,
+                currentProtein,
                 maintainFat,
                 dailyFatLeft,
+                currentFat
             },
         };
     }
