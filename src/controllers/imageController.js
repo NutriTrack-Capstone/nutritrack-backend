@@ -23,7 +23,7 @@ const imageDetection = async (req, res) => {
 
             if(result.length > 0){
                 res.status(200).json({status:"success", data: {foodName:result[0].foodName ,score:modelResponse.data.predictions[0].score[0], 
-                    calories:result[0].calories, carbohydrates:result[0].carbohydrates, protein:result[0].protein, fat:result[0].fat, image:result[0].image}});
+                    calories:result[0].calories, carbo:result[0].carbo, protein:result[0].protein, fat:result[0].fat, image:result[0].image}});
             } else {
                 res.status(404).json({status:"error", message:"Failed to fetch food information"});
             }
