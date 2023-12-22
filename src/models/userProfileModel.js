@@ -99,10 +99,10 @@ class UserProfileModel {
             return {status : "error", "message":"USERNAME NOT FOUND"};
         }
 
-        let newDailyCaloriesLeft = Math.max(existingUser.maintainCalories - calories, 0);
-        let newDailyCarboLeft = Math.max(existingUser.maintainCarbo - carbo, 0);
-        let newDailyProteinLeft = Math.max(existingUser.maintainProtein - protein, 0);
-        let newDailyFatLeft = Math.max(existingUser.maintainFat - flat, 0);
+        let newDailyCaloriesLeft = Math.max(existingUser.dailyCaloriesLeft - calories, 0);
+        let newDailyCarboLeft = Math.max(existingUser.dailyCarboLeft - carbo, 0);
+        let newDailyProteinLeft = Math.max(existingUser.dailyProteinLeft - protein, 0);
+        let newDailyFatLeft = Math.max(existingUser.dailyFatLeft - flat, 0);
 
         let newCurrentCalories = existingUser.currentCalories + calories;
         let newCurrentCarbo = existingUser.currentCarbo + carbo;
